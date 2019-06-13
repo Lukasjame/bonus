@@ -10,6 +10,6 @@ clean:
 	rm -f  ./bonus.exe
 
 main:   
-	$(CC) -o $(BINDIR)bonus.exe $(OBJDIR)bonus.c  -lgsl -lgslcblas  -lm
+	$(CC) -o $(BINDIR)bonus $(OBJDIR)bonus.c  -lgsl -lgslcblas  -lm
 	
  

@@ -45,14 +45,37 @@ int main (void)
 
   if (pipe) {   // If gnuplot is found
     fprintf(pipe, "set term wx\n");         // set the terminal               
-    fprintf(pipe, "set datafile separator ','\n"); //datafile separator ','
+    //fprintf(pipe, "set datafile separator ','\n"); //datafile separator ','
     fprintf(pipe, "set xlabel '|Force| (Newtons)'\n");
     fprintf(pipe, "set ylabel 'Distance (meters)'\n");
     fprintf(pipe, "set key box \n");
     fprintf(pipe, "set key top horizontal left\n");
     fprintf(pipe, "set title 'Measured Displacement of Spring\n");
-    fprintf(pipe, "plot './data/spring_data.csv' using  ($2*9.81):1   title '' \n");
-    fprintf(pipe, "replot './data/spring_data.csv' using ($2*9.81):($2*9.81*%.4f+%.4f) title 'y=%.4f*x+%.4f' with linespoints\n",c1,c0,c1,c0);
+    //fprintf(pipe, "plot './data/spring_data.csv' using  ($2*9.81):1   title '' \n");
+    //fprintf(pipe, "replot './data/spring_data.csv' using ($2*9.81):($2*9.81*%.4f+%.4f) title 'y=%.4f*x+%.4f' with linespoints\n",c1,c0,c1,c0);
+    // 1 sending gnuplot the plot '-' command
+    fprintf(pipe, "plot '-' title '<x,y>' with points  pt 7 lc rgb 'blue',\
+                         '-' title 'y=%.4f*x+%.4f' with  linespoints  pt  6 lc rgb 'red'\n",c1,c0,c1,c0);
+    // fprintf(pipe, "plot '-' title '<x,y>' with points  pt 7 lc rgb 'blue'\n");
+     // 2 followed by data points: <x,y>
+    for (int i = 0; i < n; i++)
+    {
+      printf("%lf %lf\n", x[i], y[i]);
+      fprintf(pipe, "%lf %lf\n", x[i], y[i]);
+    }
+     // 3 followed by the letter "e" 
+    fprintf(pipe, "e");
+     
+    // linear fit
+   fprintf(pipe,"\n"); // start a new draw item
+    fprintf(pipe, "%lf %lf\n" , 0.0,c0+c1*0.0);
+    for (int i = 0; i < n; i++)
+   {
+    fprintf(pipe, "%lf %lf\n" , x[i],c0+c1*x[i]);
+  }
+    fprintf(pipe, "%lf %lf\n", 10.0,c0+c1*10.0);
+    fprintf(pipe, "e");
+
     fflush(pipe); //flush pipe
     fprintf(pipe,"exit \n");   // exit gnuplot
     pclose(pipe);    //close pipe
