@@ -10,7 +10,8 @@
 ![fitting代码](./img/fittingcode.png)  
   
 ### 1.3 调用gnuplot画图  
-![plot代码](./img/plot.png)
+![plot代码1](./img/plot1.png)
+![plot代码2](./img/plot2.png)
   
 ## 2.Makefile  
 ![Makefile](./img/makefile.png)  
